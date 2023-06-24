@@ -1,1 +1,2 @@
-https://stackoverflow.com/questions/42094842/curl-error-60-ssl-certificate-in-laravel-5-4
+# mpesa integration
+https://www.youtube.com/watch?v=qTxnsNYWTKo&list=PLa9jxxDE6i_1KSq_cUnfZJVqpJMpiljVg

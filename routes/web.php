@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
-Route::controller(PaymentController::class)->group(function(){
-Route::get("/", "token");
+
+Route::controller(PaymentController::class)
+// ->prefix("payments")
+// ->as("payments")
+->group(function(){
+Route::get("/", "index");
+Route::get("/pay","initializeStkPush");
+Route::post("/callback", "stkCallBack");
 });
