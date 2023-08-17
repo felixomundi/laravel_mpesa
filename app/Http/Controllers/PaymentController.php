@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payments;
-use Carbon\Carbon;
-use Dotenv\Dotenv;
-use Faker\Provider\ar_EG\Payment;
-use Illuminate\Database\Eloquent\Casts\Json;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Stmt\TryCatch;
 use Throwable;
 
 class PaymentController extends Controller
@@ -29,6 +23,8 @@ class PaymentController extends Controller
         $response = Http::withBasicAuth($consumer_key, $consumer_secret)->get($url);
         return $response["access_token"];
     }
+
+
         public function initializeStkPush(){
             $token = $this->token();
             $url = env("MPESA_STK_PUSH_URL");

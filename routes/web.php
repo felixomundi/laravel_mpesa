@@ -21,6 +21,6 @@ Route::controller(PaymentController::class)
 // ->as("payments")
 ->group(function(){
 Route::get("/", "index");
-Route::get("/pay","initializeStkPush");
+Route::get("/pay", "initializeStkPush");
 Route::post("/callback", "stkCallBack");
 });
