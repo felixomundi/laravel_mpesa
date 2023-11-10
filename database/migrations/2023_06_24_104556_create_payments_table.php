@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string("phone");
-            $table->float("amount");
-            $table->string("reference");
-            $table->string("description");
+            $table->string("phone")->nullable();
+            $table->float("amount")->nullable();
+            $table->string("reference")->nullable();
+            $table->string("description")->nullable();
             $table->string("MerchantRequestID")->unique();
             $table->string("CheckoutRequestID")->unique();
             $table->string("status"); //requested // paid // failed

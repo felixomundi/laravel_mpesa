@@ -3,7 +3,8 @@
     "scripts": {
         "nodemon": "nodemon index.js",
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "start": "nodemon index.js"
     },
     "devDependencies": {
         "axios": "^1.1.2",

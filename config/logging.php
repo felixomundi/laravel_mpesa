@@ -5,6 +5,8 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
+use function Psy\debug;
+
 return [
 
     /*
@@ -125,6 +127,12 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+        'mpesa' => [
+            'driver' => 'single',
+            'ignore_exceptions' => false,
+            'path' => storage_path('logs/mpesa.log'),
+            "level"=>env("LOG_LEVEL", "debug"),
         ],
     ],
 

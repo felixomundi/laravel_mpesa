@@ -6,7 +6,7 @@ use App\Models\Payments;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
-
+use Illuminate\Support\Facades\Log;
 class PaymentController extends Controller
 {
 
@@ -52,6 +52,7 @@ class PaymentController extends Controller
 
                 $response = Http::withToken($token)->post($url, $data);
                 // return $response;
+               
 
                 $res = json_decode($response);
                 $rescode = $res->ResponseCode;
@@ -70,7 +71,6 @@ class PaymentController extends Controller
                     $payment->status = "Requested";
                     $payment ->save();
                     return $customerMessage;
-
                 }
 
             }

@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::controller(PaymentController::class)
-// ->prefix("payments")
-// ->as("payments")
 ->group(function(){
 Route::get("/", "index");
 Route::get("/pay", "initializeStkPush");
