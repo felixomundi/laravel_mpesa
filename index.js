@@ -12,7 +12,7 @@ async function Connect() {
         addr: 8000,
         authtoken:process.env.AUTHTOKEN,
     });
-    console.log(url)
+    console.log(url);
 };
 
 Connect();

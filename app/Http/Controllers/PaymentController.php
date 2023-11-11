@@ -11,14 +11,13 @@ class PaymentController extends Controller
 {
 
     public function index(){
-
         return "Welcome to daraja home of apis";
 
     }
 
     public function token(){
-        $consumer_key = "K3cm0dWQaqwNnqIYaNEJMx2WKdkXFkVh";
-        $consumer_secret = "CgIsLnhqwKcNM6X9";
+        $consumer_key = env("MPESA_CONSUMER_KEY");
+        $consumer_secret = env("MPESA_CONSUMER_SECRET");
         $url ="https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
         $response = Http::withBasicAuth($consumer_key, $consumer_secret)->get($url);
         return $response["access_token"];
@@ -70,45 +69,59 @@ class PaymentController extends Controller
                     $payment->CheckoutRequestID = $checkoutId;
                     $payment->status = "Requested";
                     $payment ->save();
+                    // $this->stkCallBack();
                     return $customerMessage;
                 }
 
             }
             catch(Throwable $e){
+                Log::info("push error");
                 return $e->getMessage();
             }
 
         }
         public function stkCallBack(){
-           $data = file_get_contents('php://input');
-           Storage::disk("local")->put("stk_payment.json", $data);
-           $response = json_decode($data);
-           $resultCode = $response->Body->stkCallback->ResultCode;
-           if($resultCode ==0){
-            // $mId = $response->Body->stkCallback->MerchantRequestID;
-            $cId =$response->Body->stkCallback->CheckoutRequestID;
-            $resultDesc = $response->Body->stkCallback->ResultDesc;
-            $amount  = $response->Body->stkCallback->CallbackMetadata->Item[0]->Value;
-            $MpesaReceiptNumber = $response->Body->stkCallback->CallbackMetadata->Item[1]->Value;
-            $TransactionDate = $response->Body->stkCallback->CallbackMetadata->Item[3]->Value;
-            $PhoneNumber  = $response->Body->stkCallback->CallbackMetadata->Item[4]->Value;
 
-            $payment = Payments::where("CheckoutRequestID", $cId)->firstOrFail();
-            $payment->status = "Paid";
-            $payment->TransactionDate =$TransactionDate;
-            $payment->ResultDesc =$resultDesc;
-            $payment->amount =$amount;
-            $payment->MpesaReceiptNumber =$MpesaReceiptNumber;
-            $payment->phone =$PhoneNumber;
-            $payment->save();
-           }else{
-            $cId =$response->Body->stkCallback->CheckoutRequestID;
-            $resultDesc = $response->Body->stkCallback->ResultDesc;
-            $payment = Payments::where("CheckoutRequestID", $cId)->firstOrFail();
-            $payment->ResultDesc= $resultDesc;
-            $payment->status = "Failed";
-            $payment->save();
-           }
+            try {
+                Log::info("waiting for data");
+                return;
+            } catch (\Throwable $th) {
+               $error =   $th->getMessage();
+               Log::error($error);
+               return;
+            }
+            // Log::info("waiting for data");
+        //    $data = file_get_contents('php://input');
+        //    Storage::disk("local")->put("stk_payment.txt", $data);
+        //    Log::info("ok");
+
+        //    $response = json_decode($data);
+        //    $resultCode = $response->Body->stkCallback->ResultCode;
+        //    if($resultCode ==0){
+        //     // $mId = $response->Body->stkCallback->MerchantRequestID;
+        //     $cId =$response->Body->stkCallback->CheckoutRequestID;
+        //     $resultDesc = $response->Body->stkCallback->ResultDesc;
+        //     $amount  = $response->Body->stkCallback->CallbackMetadata->Item[0]->Value;
+        //     $MpesaReceiptNumber = $response->Body->stkCallback->CallbackMetadata->Item[1]->Value;
+        //     $TransactionDate = $response->Body->stkCallback->CallbackMetadata->Item[3]->Value;
+        //     $PhoneNumber  = $response->Body->stkCallback->CallbackMetadata->Item[4]->Value;
+
+        //     $payment = Payments::where("CheckoutRequestID", $cId)->firstOrFail();
+        //     $payment->status = "Paid";
+        //     $payment->TransactionDate =$TransactionDate;
+        //     $payment->ResultDesc =$resultDesc;
+        //     $payment->amount =$amount;
+        //     $payment->MpesaReceiptNumber =$MpesaReceiptNumber;
+        //     $payment->phone =$PhoneNumber;
+        //     $payment->save();
+        //    }else{
+        //     $cId =$response->Body->stkCallback->CheckoutRequestID;
+        //     $resultDesc = $response->Body->stkCallback->ResultDesc;
+        //     $payment = Payments::where("CheckoutRequestID", $cId)->firstOrFail();
+        //     $payment->ResultDesc= $resultDesc;
+        //     $payment->status = "Failed";
+        //     $payment->save();
+        //    }
 
         }
 
